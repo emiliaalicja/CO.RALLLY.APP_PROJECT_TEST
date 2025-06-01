@@ -38,9 +38,10 @@ class CreatePage (BasePage):
         span_elem = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located(CreatePageLocators.COPIED_LINK_SPAN)
         )
+        #delete extra spacje
         link_text = span_elem.text.strip()
 
-        folder_path = os.path.join(os.getcwd(), "DataTest")
+        folder_path = os.path.join(os.getcwd(), "resources")
         os.makedirs(folder_path, exist_ok=True)
 
         file_path = os.path.join(folder_path, filename)
@@ -74,27 +75,6 @@ class CreatePage (BasePage):
         toggle = self.driver.find_element(*CreatePageLocators.TOGGLE_COMMENTS)
         toggle.click()
 
-
-
-
-      #  try:
-            # Scroll przeglądarki
-            #self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-            # Czekaj aż przycisk będzie widoczny
-           # self.driver.find_element(*CreatePageLocators.CREATEPOLL_CLICK).click()
-           # print("Kliknięto przycisk.")
-
-            #Czekaj aż przycisk kopiuj będzie widoczny
-            #poll_link_element = self.driver.find_element(*CreatePageLocators.COPY_CLICK).click()
-            #Pobirerz link
-          #  poll_link = poll_link_element.text
-           # print(f"Link do ankiety: {poll_link}")
-
-       # except Exception as e:
-        #    print("Nie udało się kliknąć przycisku.")
-         #   self.driver.save_screenshot("create_poll_button_scroll_fail.png")
-         #   raise e
 
     def get_error_date_message(self):
         element = self.driver.find_element(*CreatePageLocators.ERROR_DATE_MESSAGE)

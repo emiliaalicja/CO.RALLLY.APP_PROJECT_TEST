@@ -11,8 +11,12 @@ def random_location():
 def random_description():
     return fake.sentence(nb_words=15)
 
-def random_author():
+def random_participant():
     return fake.name()  # np. "Jan Kowalski"
+
+def random_email(domain="example.com"):
+    name = fake.user_name()
+    return f"{name}@{domain}"
 
 def random_comment_author():
     return fake.first_name()  # jeśli inny od autora
