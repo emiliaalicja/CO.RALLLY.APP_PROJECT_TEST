@@ -5,19 +5,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from Pages.create_page import CreatePage
-from Pages.poll_page import PollPageLocators
+#from Pages.poll_page import PollPageLocators
 
-
-# class HomePageLocators:
-#     """
-#     Home Page locators
-#     """
-#     CREATE_NEW_POLL = (By.LINK_TEXT, "Create Group Poll")
 
 
 class HomePage (BasePage):
     def click_create_group_poll(self):
-        wait = WebDriverWait(self.driver, 10)  # Czekaj max 10 sek
+        wait = WebDriverWait(self.driver, 15)  # Czekaj max 10 sek
         button = wait.until(EC.element_to_be_clickable(HomePageLocators.CREATE_NEW_POLL))
         button.click()
         return CreatePage (self.driver)

@@ -266,12 +266,12 @@ class PollTest(BaseTest):
 
     def test_delete_comment(self):
         previous_count = self.poll_page.get_comment_count()
+        author_comment = random_comment_author()
+        description_comment = random_description()
 
-        author = random_comment_author()
-        description = random_description()
+        self.poll_page.enter_comment_text(description_comment)
+        self.poll_page.enter_comment_author(author_comment)
 
-        self.poll_page.enter_comment_author(author)
-        self.poll_page.enter_comment_text(description)
         self.poll_page.add_comment()
 
         #Wait for comments to increase

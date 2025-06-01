@@ -41,7 +41,10 @@ class CreatePage (BasePage):
         #delete extra spacje
         link_text = span_elem.text.strip()
 
-        folder_path = os.path.join(os.getcwd(), "resources")
+        # Ścieżka do katalogu głównego projektu PROJEKT (czyli jeden poziom wyżej względem Test/)
+        BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+        folder_path = os.path.join(BASE_DIR, "resources")
         os.makedirs(folder_path, exist_ok=True)
 
         file_path = os.path.join(folder_path, filename)
