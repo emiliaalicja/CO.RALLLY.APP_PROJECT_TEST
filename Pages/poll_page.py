@@ -5,7 +5,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains #needed for double click
 
 
-
 class PollPage(BasePage):
 
     def __init__(self, driver):
@@ -296,8 +295,3 @@ class PollPage(BasePage):
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(PollPageLocators.MANAGE_BUTTON)).click()
         WebDriverWait(self.driver, 15).until(EC.element_to_be_clickable(PollPageLocators.DELETE_BUTTON)).click()
         self.driver.find_element(*PollPageLocators.CONFIRM_DELETE_BUTTON).click()
-
-
-
-
-

@@ -5,8 +5,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from Pages.create_page import CreatePage
 
 
-
-
 class HomePage (BasePage):
     def click_create_group_poll(self):
         """

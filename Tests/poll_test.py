@@ -89,17 +89,13 @@ class PollTest(BaseTest):
         self.poll_page.confirm_votes()
         self.poll_page.enter_participant_name(member)
         self.poll_page.submit_participant_vote()
-
         icon_color_before = self.poll_page.get_icon_fill_color()
         print(icon_color_before)
         expected_color_before = self.poll_page.get_icon_fill_color_no()
-
         self.poll_page.change_participant()
         self.poll_page.edit_votes()
         self.poll_page.edit_vote_doubleclick()
         self.poll_page.save_edit_votes()
-
-
         icon_color_after = self.poll_page.get_icon_fill_color()
         print(icon_color_after)
         expected_color_after = self.poll_page.get_icon_fill_color_ifneedbe()
@@ -122,15 +118,12 @@ class PollTest(BaseTest):
         icon_color_before = self.poll_page.get_icon_fill_color()
         print(icon_color_before)
         expected_color_before = self.poll_page.get_icon_fill_color_ifneedbe()
-
         self.poll_page.change_participant()
         self.poll_page.edit_votes()
         self.poll_page.edit_vote_doubleclick()
         self.poll_page.save_edit_votes()
-
         icon_color_after = self.poll_page.get_icon_fill_color()
         expected_color_after =  self.poll_page.get_icon_fill_color_yes()
-
         self.assertEqual(icon_color_before, expected_color_before,
                          f"Expected color before the change: {expected_color_before}, but it was: {icon_color_before}")
         self.assertEqual(icon_color_after, expected_color_after,
@@ -145,19 +138,15 @@ class PollTest(BaseTest):
         self.poll_page.confirm_votes()
         self.poll_page.enter_participant_name(member)
         self.poll_page.submit_participant_vote()
-
         icon_color_before = self.poll_page.get_icon_fill_color()
         print(icon_color_before)
         expected_color_before = self.poll_page.get_icon_fill_color_ifneedbe()
-
         self.poll_page.change_participant()
         self.poll_page.edit_votes()
         self.poll_page.edit_vote_oneclick()
         self.poll_page.save_edit_votes()
-
         icon_color_after = self.poll_page.get_icon_fill_color()
         expected_color_after = self.poll_page.get_icon_fill_color_no()
-
         self.assertEqual(icon_color_before, expected_color_before,
                          f"Expected color before the change: {expected_color_before}, but it was: {icon_color_before}")
         self.assertEqual(icon_color_after, expected_color_after,
@@ -173,16 +162,13 @@ class PollTest(BaseTest):
         self.poll_page.confirm_votes()
         self.poll_page.enter_participant_name(member)
         self.poll_page.submit_participant_vote()
-
         icon_color_before = self.poll_page.get_icon_fill_color()
         print(icon_color_before)
         expected_color_before = self.poll_page.get_icon_fill_color_yes()
-
         self.poll_page.change_participant()
         self.poll_page.edit_votes()
         self.poll_page.edit_vote_doubleclick()
         self.poll_page.save_edit_votes()
-
         icon_color_after = self.poll_page.get_icon_fill_color()
         expected_color_after = self.poll_page.get_icon_fill_color_no()
 
@@ -190,8 +176,6 @@ class PollTest(BaseTest):
                          f"Expected color before the change: {expected_color_before}, but it was: {icon_color_before}")
         self.assertEqual(icon_color_after, expected_color_after,
                          f"Expected color after the change: {expected_color_after}, but it was: {icon_color_after}")
-
-
 
     def test_edit_vote_member_yestomaybe(self):
         #oneclick
@@ -280,7 +264,7 @@ class PollTest(BaseTest):
         self.poll_page.manage_poll()
         self.poll_page.resume_poll()
         label_text = self.poll_page.get_live_label()
-        self.assertEqual(label_text, "Paused", f"Should receive label 'Live', but received: '{label_text}'")
+        self.assertEqual(label_text, "Live", f"Should receive label 'Live', but received: '{label_text}'")
 
 
     def test_delete_poll(self):
@@ -291,5 +275,3 @@ class PollTest(BaseTest):
         welcome_message = self.home_page.get_welcome_message()
         print(welcome_message)
         self.assertEqual(welcome_message, "Welcome","Should receive home page and text 'Welcome'")
-
-

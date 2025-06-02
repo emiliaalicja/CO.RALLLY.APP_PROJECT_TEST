@@ -6,7 +6,6 @@ from Pages.poll_page import PollPage
 from Locators.create_page_locators import CreatePageLocators
 
 
-
 class CreatePage (BasePage):
     def enter_title(self, title):
         WebDriverWait(self.driver, 15).until(EC.presence_of_element_located(CreatePageLocators.TITLE_INPUT)).send_keys(title)
