@@ -1,7 +1,6 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.alert import Alert
 
-
 class BasePage:
     """
     Base page for all pages

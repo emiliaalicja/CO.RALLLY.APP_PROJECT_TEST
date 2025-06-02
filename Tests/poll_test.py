@@ -1,6 +1,7 @@
 from Tests.base_test import BaseTest
 from Pages.home_page import HomePage
 import logging
+
 logging.basicConfig(level=logging.INFO)
 from Test_data.fake_data import (
     random_meeting_name,
@@ -29,13 +30,12 @@ class PollTest(BaseTest):
         self.poll_page.poll_was_created = True
         print("Poll is created")
 
-
     def test_add_vote(self):
         member = random_participant()
         email = random_email()
         self.poll_page.add_new_participant()
         before = self.poll_page.get_icon_counts()
-        #print number of icons
+        # print number of icons
         print("Before:")
         for i, val in enumerate(before):
             print(f"Icon {i + 1}: {val}")
@@ -47,7 +47,7 @@ class PollTest(BaseTest):
         self.poll_page.submit_participant_vote()
 
         after = self.poll_page.get_icon_counts()
-        #print number if icons
+        # print number if icons
         print("After:")
         for i, val in enumerate(after):
             print(f"Icon {i + 1}: {val}")
@@ -56,7 +56,7 @@ class PollTest(BaseTest):
         self.assertEqual(after[2], before[2], f"Icon 3 should stay the same: {before[2]} -> {after[2]}")
 
     def test_edit_vote_member_no_toyes(self):
-        #one click
+        # one click
         member = random_participant()
         self.poll_page.add_new_participant()
         self.poll_page.confirm_votes()
@@ -80,10 +80,8 @@ class PollTest(BaseTest):
         self.assertEqual(icon_color_after, expected_color_after,
                          f"Expected color after the change: {expected_color_after}, but it was: {icon_color_after}")
 
-
-
     def test_edit_vote_member_no_tomaybe(self):
-        #double click
+        # double click
         member = random_participant()
         self.poll_page.add_new_participant()
         self.poll_page.confirm_votes()
@@ -105,10 +103,8 @@ class PollTest(BaseTest):
         self.assertEqual(icon_color_after, expected_color_after,
                          f"Expected color after the change: {expected_color_after}, but it was: {icon_color_after}")
 
-
-
     def test_edit_vote_member_maybetoyes(self):
-        #double click
+        # double click
         member = random_participant()
         self.poll_page.add_new_participant()
         self.poll_page.add_vote_ifneed()
@@ -123,15 +119,14 @@ class PollTest(BaseTest):
         self.poll_page.edit_vote_doubleclick()
         self.poll_page.save_edit_votes()
         icon_color_after = self.poll_page.get_icon_fill_color()
-        expected_color_after =  self.poll_page.get_icon_fill_color_yes()
+        expected_color_after = self.poll_page.get_icon_fill_color_yes()
         self.assertEqual(icon_color_before, expected_color_before,
                          f"Expected color before the change: {expected_color_before}, but it was: {icon_color_before}")
         self.assertEqual(icon_color_after, expected_color_after,
                          f"Expected color after the change: {expected_color_after}, but it was: {icon_color_after}")
 
-
     def test_edit_vote_member_maybetono(self):
-        #oneclick
+        # oneclick
         member = random_participant()
         self.poll_page.add_new_participant()
         self.poll_page.add_vote_ifneed()
@@ -152,10 +147,8 @@ class PollTest(BaseTest):
         self.assertEqual(icon_color_after, expected_color_after,
                          f"Expected color after the change: {expected_color_after}, but it was: {icon_color_after}")
 
-
-
     def test_edit_vote_member_yestono(self):
-        #double click
+        # double click
         member = random_participant()
         self.poll_page.add_new_participant()
         self.poll_page.add_vote_yes1()
@@ -178,7 +171,7 @@ class PollTest(BaseTest):
                          f"Expected color after the change: {expected_color_after}, but it was: {icon_color_after}")
 
     def test_edit_vote_member_yestomaybe(self):
-        #oneclick
+        # oneclick
         member = random_participant()
         self.poll_page.add_new_participant()
         self.poll_page.add_vote_yes1()
@@ -199,21 +192,21 @@ class PollTest(BaseTest):
         self.assertEqual(icon_color_after, expected_color_after,
                          f"Expected color after the change: {expected_color_after}, but it was: {icon_color_after}")
 
-
     def test_delete_member(self):
         member = random_participant()
         self.poll_page.add_new_participant()
         self.poll_page.confirm_votes()
         self.poll_page.enter_participant_name(member)
         self.poll_page.submit_participant_vote()
-        #sleep(0.5)
+        # sleep(0.5)
         self.poll_page.change_participant()
         self.poll_page.delete_participant()
         self.poll_page.confirm_delete_participant()
-        #asercja no participant
+        # asercja no participant
         label_text = self.poll_page.get_noparticipant_label()
         print(f"label_text: {repr(label_text)}")
-        self.assertEqual(label_text, "No participants", f"Expected label 'No participants', but received: '{label_text}'")
+        self.assertEqual(label_text, "No participants",
+                         f"Expected label 'No participants', but received: '{label_text}'")
 
     def test_add_new_comment(self):
         previous_count = self.poll_page.get_comment_count()
@@ -222,7 +215,7 @@ class PollTest(BaseTest):
         self.poll_page.enter_comment_text(description)
         self.poll_page.enter_comment_author(author)
         self.poll_page.add_comment()
-        #Wait for comment increase
+        # Wait for comment increase
         self.poll_page.wait_for_comment_count_to_increase(previous_count)
         new_count = self.poll_page.get_comment_count()
         self.assertEqual(new_count, previous_count + 1, "One comment should be added")
@@ -231,8 +224,8 @@ class PollTest(BaseTest):
         logging.info(f"[INFO] Expected author: '{author}', founded: '{found_author}'")
         logging.info(f"[INFO] Expected description: '{description}', founded: '{found_text}'")
         self.assertEqual(found_author, author, f"The actual author is {found_author}, but expected is {author}")
-        self.assertEqual(found_text, description, f"The actual description is {found_text}. but expected is {description}")
-
+        self.assertEqual(found_text, description,
+                         f"The actual description is {found_text}. but expected is {description}")
 
     def test_delete_comment(self):
         previous_count = self.poll_page.get_comment_count()
@@ -241,16 +234,17 @@ class PollTest(BaseTest):
         self.poll_page.enter_comment_text(description_comment)
         self.poll_page.enter_comment_author(author_comment)
         self.poll_page.add_comment()
-        #Wait for comments to increase
+        # Wait for comments to increase
         self.poll_page.wait_for_comment_count_to_increase(previous_count)
         new_count = self.poll_page.get_comment_count()
         assert new_count == previous_count + 1, f"Number of comments should increase by 1, actual value is {new_count}"
         self.poll_page.click_comment_ellipsis_by_you()
         self.poll_page.delete_comment()
-        #Wait for number of comments to decrease
+        # Wait for number of comments to decrease
         self.poll_page.wait_for_comment_count_to_decrease(new_count)
         final_count = self.poll_page.get_comment_count()
-        self.assertEqual(final_count, previous_count, f"Number of comments should be {previous_count}, but the actual number is {final_count}")
+        self.assertEqual(final_count, previous_count,
+                         f"Number of comments should be {previous_count}, but the actual number is {final_count}")
 
     def test_pause(self):
         self.poll_page.manage_poll()
@@ -266,12 +260,11 @@ class PollTest(BaseTest):
         label_text = self.poll_page.get_live_label()
         self.assertEqual(label_text, "Live", f"Should receive label 'Live', but received: '{label_text}'")
 
-
     def test_delete_poll(self):
         self.poll_page.delete_poll()
         self.poll_page.poll_was_created = False
-        #Go to home page
+        # Go to home page
         self.home_page.get_welcome_message()
         welcome_message = self.home_page.get_welcome_message()
         print(welcome_message)
-        self.assertEqual(welcome_message, "Welcome","Should receive home page and text 'Welcome'")
+        self.assertEqual(welcome_message, "Welcome", "Should receive home page and text 'Welcome'")

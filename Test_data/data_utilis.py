@@ -1,6 +1,7 @@
 import os
 import csv
 
+
 class DataReader:
     @staticmethod
     def get_csv_data(filename):
@@ -15,5 +16,3 @@ class DataReader:
             for row in reader:
                 rows.append(row)
         return rows
-
-

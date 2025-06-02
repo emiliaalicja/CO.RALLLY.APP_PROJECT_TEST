@@ -1,6 +1,7 @@
 from Tests.base_test import BaseTest
 from Pages.home_page import HomePage
 
+
 class PollTest(BaseTest):
 
     def setUp(self):
