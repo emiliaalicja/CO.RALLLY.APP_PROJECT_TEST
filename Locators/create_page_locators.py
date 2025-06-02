@@ -15,6 +15,5 @@ class CreatePageLocators:
     ERROR_TITLE_MESSAGE = (By.XPATH, "//p[contains(text(), 'Title') and contains(@class, 'text-destructive')]")
     MODAL_CLOSE_BUTTON = (By.CSS_SELECTOR, "button.absolute.right-4.top-4")
     COPIED_LINK_SPAN = (By.CSS_SELECTOR, "span.truncate")
-    HEADER = (By.XPATH, "//h5[normalize-space()='Your administrator rights can be lost if you clear your cookies']")
     TITLE = (By.XPATH, '//*[@data-testid="poll-title"]')
     TOGGLE_COMMENTS = (By.ID, "disableComments")

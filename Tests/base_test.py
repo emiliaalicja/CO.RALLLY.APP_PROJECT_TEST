@@ -18,9 +18,9 @@ class BaseTest(unittest.TestCase):
         self.home_page = HomePage(self.driver)
 
 
-    def test_open_homepage(self):
-            #self.assertIn("Rallly", self.driver.title)
-        return
+    # def test_open_homepage(self):
+    #         #self.assertIn("Rallly", self.driver.title)
+    #     return
 
     def tearDown(self):
         try:

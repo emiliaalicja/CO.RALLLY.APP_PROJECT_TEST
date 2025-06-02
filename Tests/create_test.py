@@ -1,4 +1,4 @@
-from Tests.base_tests import BaseTest
+from Tests.base_test import BaseTest
 from Pages.home_page import HomePage
 from ddt import ddt, data, unpack
 from Test_data.data_utilis import DataReader
@@ -10,23 +10,20 @@ from Test_data.fake_data import (
 
 
 @ddt
-class CreateTest (BaseTest): #klasa dziedziczy po BaseTest: inicjalizacja przeglądarki itp.
+class CreateTest (BaseTest): #Inherits from BaseTest
     def setUp(self):
-        #Wywołanie setUp z klasy bazowej
+        # Calling setUp from the base class
         super().setUp()
-        #Dodatkowy warunek wstępny - wejście na stronę logowania??
-        self.home_page = HomePage(self.driver)  # Stworzenie obiektu HomePage
-        #wykonują akcje klikniecia, która przenosi mnie na stronę tworzenia ankiety
+        #Additional prerequisite - entering the login page
+        self.home_page = HomePage(self.driver)  #Creating a HomePage object
+        #Perform a click action that takes me to the survey creation page from home page
         self.create_page = self.home_page.click_create_group_poll()
 
 
-
-# jest okej
     def test_valid_create(self):
         name = random_meeting_name()
         location = random_location()
         description = random_description()
-
         self.create_page.enter_title(name)
         self.create_page.enter_location(location)
         self.create_page.enter_description(description)
@@ -34,29 +31,26 @@ class CreateTest (BaseTest): #klasa dziedziczy po BaseTest: inicjalizacja przegl
         self.create_page.click_create_poll()
         #copy link from modal
         self.create_page.save_modal_link_to_file()
-        #zamknięcie modala przejście na stronę ankiety
+        #Closing the modal going to the survey page
         self.poll_page = self.create_page.close_modal_and_go_to_poll_page()
-        #UWAGA: DODANIE POLL_WAS_CREATED ŻEBY MI SIE USUNELA ANKIETA, MOZE POTEM DO OPTYMALIZACJI
-        #DO SPRAWDZENIA RÓWNIEŻ CZY POWINNA BYĆ TUTAJ OPCJA SELF.POLL_PAGE I CZY TO JEST POPRAWNE
+        #condition required to delete surveys after the test
         self.poll_page.poll_was_created = True
-        #sprawdzenie tytułu ankiety
+        #Check the survey title
         result_title = self.poll_page.get_page_title()
-        self.assertEqual(result_title, name, "Tytuł spotkania nie jest zgodny z wprowadzonym w formularzu.")
+        self.assertEqual(result_title, name, "The meeting title does not match the one entered in the form.")
         print(f"Tytuł spotkania: {result_title} - test passed!")
 
-        #sprawdzenie opisu ankiety
+        #Check the survey description
         result_description = self.poll_page.get_page_description()
-
-        self.assertEqual(result_description, description,  "Tytuł spotkania nie jest zgodny z wprowadzonym w formularzu.")
+        self.assertEqual(result_description, description,  "The meeting description does not match the one entered in the form.")
         print(f"Description: {result_description} - test passed!")
 
-
+        #Check the survey location
         result_localization = self.poll_page.get_page_localization()
-        self.assertEqual(result_localization, location, "Localization is not equal to enter")
+        self.assertEqual(result_localization, location, "The meeting location does not match the one entered in the form.")
         print(f"Localization: {result_localization} - test passed!")
 
-
-        #sprawdzenie 3 opcji dat
+        #Check dates options
         options_text = self.poll_page.get_page_dates_options()
         self.assertEqual(options_text, "3 options", f"Expected '3 options' but got '{options_text}'")
 
@@ -67,6 +61,7 @@ class CreateTest (BaseTest): #klasa dziedziczy po BaseTest: inicjalizacja przegl
 
     @data(*DataReader.get_csv_data("optional_attributes_for_poll.csv"))
     @unpack
+
     def test_valid_poll_optional_fields_combinations(self, title, location, description):
 
         self.create_page.enter_title(title)
@@ -82,14 +77,12 @@ class CreateTest (BaseTest): #klasa dziedziczy po BaseTest: inicjalizacja przegl
         self.poll_page.poll_was_created = True
         result_title = self.poll_page.get_page_title()
         self.assertEqual(result_title, title,
-                         "Tytuł spotkania nie jest zgodny z wprowadzonym w formularzu.")
-        print(f"Tytuł spotkania: {result_title} - test passed!")
-
+                         "The meeting title does not match the one entered in the form.")
+        print(f"Meeting title: {result_title} - test passed!")
 
 
     def test_invalid_create_date(self): #działa
         name = random_meeting_name()
-
         self.create_page.enter_title(name)
         self.create_page.click_create_poll()
         error_text = self.create_page.get_error_date_message()
@@ -105,7 +98,6 @@ class CreateTest (BaseTest): #klasa dziedziczy po BaseTest: inicjalizacja przegl
 
     def test_valid_create_without_comments(self):
         name = random_meeting_name()
-
         self.create_page.enter_title(name)
         self.create_page.enter_time()
         self.create_page.turn_off_comments()

@@ -1,6 +1,9 @@
 from selenium.webdriver.common.by import By
 
 class PollPageLocators:
+    """
+        Poll Page locators
+    """
     HEADER = (By.CSS_SELECTOR, "h5[data-testid='poll-title']")
     GET_TITLE = (By.CSS_SELECTOR, '[data-testid="poll-title"]')
     POLL_LOCALIZATION = (By.CSS_SELECTOR, "p.text-muted-foregroun.truncate.whitespace-nowrap.text-sm")
@@ -22,7 +25,7 @@ class PollPageLocators:
     EDIT_VOTES_BUTTON = (By.XPATH, "//span[normalize-space()='Edit votes']")
     CHOOSE_VOTE_EDIT_VOTE_BUTTON = (By.XPATH, "(//button[@data-testid='vote-selector'])[1]")
     SAVE_EDIT_VOTES_BUTTON = (By.XPATH, "//button[@type='submit' and @form='voting-form' and normalize-space()='Save']")
-    NUMBER_OF_VOTES_INITIAL = (By.XPATH, "(//span[contains(@class, 'inline-flex')])[1]/span")  # nie działa poki co mi
+    NUMBER_OF_VOTES_INITIAL = (By.XPATH, "(//span[contains(@class, 'inline-flex')])[1]/span")
     MEMBERS_ICON_SPAN = (By.TAG_NAME, "span")
     COLOR_OF_VOTED_ICON = (By.CSS_SELECTOR, "td.h-12 div.inline-flex svg path")
     COLOR_OF_NO_VOTE_ICON_LEGEND = (By.CSS_SELECTOR, "ul.flex.items-center li:nth-child(3) svg path")
@@ -36,7 +39,7 @@ class PollPageLocators:
     COMMENT_AUTHOR_NAME = (By.NAME, "authorName")
     ADD_COMMENT_BUTTON = (By.XPATH, "//button[text()='Add Comment']")
     COMMENT_TEXT_ADDED = (By.CSS_SELECTOR, "div.w-fit.whitespace-pre-wrap.pl-7.text-sm.leading-relaxed")
-    COMMENTS = (By.CSS_SELECTOR, "div[data-testid='comment']")  # kontener pojedynczego komentarza
+    COMMENTS = (By.CSS_SELECTOR, "div[data-testid='comment']")  #single comment container
     DOTS_BUTTON = (By.CSS_SELECTOR, "button > svg.lucide-ellipsis")
     GO_UP_ONE_LEVEL = (By.XPATH, "..")
     COMMENT_TEXT_INPUT = (By.NAME, "content")

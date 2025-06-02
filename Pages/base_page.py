@@ -1,5 +1,3 @@
-from selenium.webdriver.ie.webdriver import WebDriver
-
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.alert import Alert
 

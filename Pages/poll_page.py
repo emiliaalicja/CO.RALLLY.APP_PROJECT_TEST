@@ -3,7 +3,7 @@ from Locators.poll_page_locators import PollPageLocators
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains #needed for double click
-import time
+
 
 
 class PollPage(BasePage):
@@ -35,7 +35,7 @@ class PollPage(BasePage):
 
     def get_page_dates_options(self):
         options = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(PollPageLocators.POLL_DATES_OPTIONS))
-        print(f"Opcje dat: {options.text}")
+        print(f"Dat options: number: {options.text}")
         return options.text
 
     def get_page_active_comments(self):
@@ -51,7 +51,7 @@ class PollPage(BasePage):
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(PollPageLocators.ADD_NEW_PARTICIPANT)).click()
 
     def add_vote_ifneed(self):
-        #podwójne kliknięcie
+        #double click
         element = self.driver.find_element(*PollPageLocators.DATE1)
         actions = ActionChains(self.driver)
         actions.double_click(element).perform()
@@ -67,13 +67,12 @@ class PollPage(BasePage):
         self.driver.find_element(*PollPageLocators.ADD_VOTE_CONTINUE_BUTTON).click()
 
 
-
     def enter_participant_name(self, name):
         name_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(PollPageLocators.NEW_PARTICIPANT_NAME)
         )
         name_input.send_keys(name)
-        #self.driver.find_element(*PollPageLocators.NEW_PARTICIPANT_NAME).send_keys()
+
 
     def enter_participant_email(self, email):
         email_input = WebDriverWait(self.driver, 10).until(
@@ -86,25 +85,25 @@ class PollPage(BasePage):
         self.driver.find_element(*PollPageLocators.NEW_PARTICIPANT_SUBMIT).click()
 
     def get_icon_counts(self):
-        # Poczekaj, aż pierwszy span w ikonie będzie widoczny
+        # Wait up to 15 seconds until the first <span> in the member icon becomes visible
+        # This ensures that the elements are loaded before interacting with them
         WebDriverWait(self.driver, 15).until(
             EC.visibility_of_element_located(PollPageLocators.MEMBERS_ICON_SPAN)
         )
-
+        # Retrieve all elements that represent icons with the number of members: all icons
         icons = self.driver.find_elements(*PollPageLocators.ICONS_NUMBER_OF_MEMBERS)
+        # Locator used to find the <span> that contains the member count within each icon.
         span_locator = PollPageLocators.MEMBERS_ICON_SPAN
-
+        # List comprehension: for each icon, find all matching <span> elements, take the last one - contains the count,
+        # extract its text, and convert it to an integer
         return [int(icon.find_elements(*span_locator)[-1].text) for icon in icons]
 
 
     def change_participant(self):
-        # # Find svg, and next ".."
-        # button = self.driver.find_element(*PollPageLocators.DOTS_BUTTON).find_element(*PollPageLocators.GO_UP_ONE_LEVEL)
-        # button.click()
         wait = WebDriverWait(self.driver, 10)
-        # Czekamy na element DOTS_BUTTON, żeby był klikalny
+        #waiting for the DOTS_BUTTON element to be clickable
         dots_button = wait.until(EC.element_to_be_clickable(PollPageLocators.DOTS_BUTTON))
-        # Następnie znajdujemy element "go up one level" wewnątrz tego i klikamy
+        #Find the "go up one level" item inside it and click
         button = dots_button.find_element(*PollPageLocators.GO_UP_ONE_LEVEL)
         button.click()
 
@@ -126,7 +125,7 @@ class PollPage(BasePage):
 
 
     def get_icon_fill_color(self):
-        #custom wait: find element, find fill and check if its empty
+        #custom wait: find element icon, find fill and check if its empty
         def wait_for_fill(driver):
             try:
                 el = driver.find_element(*PollPageLocators.COLOR_OF_VOTED_ICON)
@@ -136,13 +135,11 @@ class PollPage(BasePage):
                 return False
 
         WebDriverWait(self.driver, 15).until(wait_for_fill)
-
         el = self.driver.find_element(*PollPageLocators.COLOR_OF_VOTED_ICON)
         return el.get_attribute('fill')
 
 
     def get_icon_fill_color_yes(self):
-
         path_element = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(PollPageLocators.COLOR_OF_YES_VOTE_ICON_LEGEND)
         )
@@ -150,20 +147,14 @@ class PollPage(BasePage):
         return fill_coloryes
 
     def get_icon_fill_color_ifneedbe(self):
-
         path_element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(PollPageLocators.COLOR_OF_IFNEEDBE_VOTE_ICON_LEGEND))
         fill_colorifneedbe = path_element.get_attribute('fill')
         return fill_colorifneedbe
 
     def get_icon_fill_color_no(self):
-
         path_element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(PollPageLocators.COLOR_OF_NO_VOTE_ICON_LEGEND))
         fill_colorno= path_element.get_attribute('fill')
         return fill_colorno
-
-    def color_text(self, text, color_code):
-        return f"\033[{color_code}m{text}\033[0m"
-
 
 
     def get_number_of_votes(self):
@@ -172,14 +163,8 @@ class PollPage(BasePage):
         )
         text = self.driver.execute_script("return arguments[0].textContent;", element).strip()
         if not text.isdigit():
-            raise ValueError(f"Oczekiwano liczby, ale otrzymano: '{text}'")
+            raise ValueError(f"Expected the number but received: '{text}'")
         return int(text)
-
-    def get_initial_number_of_votes(self):
-        return self.get_number_of_votes()
-
-    def get_final_number_of_votes(self):
-        return self.get_number_of_votes()
 
 
     def delete_participant(self):
@@ -187,14 +172,14 @@ class PollPage(BasePage):
 
 
     def confirm_delete_participant(self, timeout=10):
-        # 1) Poczekaj na pojawienie się modalu
+        # Wait for the modal to appear
         modal = WebDriverWait(self.driver, timeout).until(
             EC.visibility_of_element_located(
                 (PollPageLocators.MODAL_TO_DELETE_PARTICIPANT)))
 
-        # 2) W modal znajdź przycisk "Delete"
+        # Find thr delete button inside the modal
         delete_btn = modal.find_element(*PollPageLocators.DELETE_PARTICIPANT_MODAL)
-        # 3) Upewnij się, że jest klikalny, a potem kliknij
+        # Firstly check if its clickable, then click
         WebDriverWait(self.driver, timeout).until(
             EC.element_to_be_clickable(PollPageLocators.DELETE_PARTICIPANT_MODAL)
         )
@@ -248,61 +233,43 @@ class PollPage(BasePage):
         return count
 
     def click_comment_ellipsis_by_you(self):
-
         try:
-            # Poczekaj aż komentarz z trzema kropkami będzie widoczny
-            comment = WebDriverWait(self.driver, 10).until(
+            #Wait for the element with ".." to be present
+            WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located(PollPageLocators.COMMENTS)
             )
-
-            # Find svg, and next ".."
+            # Find svg : dots button, and next ".." - go up one level
             button = self.driver.find_element(*PollPageLocators.DOTS_BUTTON).find_element(*PollPageLocators.GO_UP_ONE_LEVEL)
-
-            # svg = comment.find_element(*PollPageLocators.DOTS_BUTTON_COMMENTS)
-            # button = svg.find_element(By.XPATH, "..")
-
-
-
-            # Scroll do przycisku
+            # Scroll to the button
             self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", button)
-
-            # Kliknij przycisk
             button.click()
-
-            print(" Kliknięto przycisk trzech kropek.")
+            print("Threee dots button next to the comment clicked.")
         except Exception as e:
-            raise Exception(f"Nie udało się kliknąć przycisku: {str(e)}")
-
+            raise Exception(f"Could not click the button: {str(e)}")
 
 
     def delete_comment(self):
-
         delete_menu_item = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable(PollPageLocators.DELETE_COMMENT_BUTTON)
         )
-
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", delete_menu_item)
-        time.sleep(0.3)
-
         try:
             delete_menu_item.click()
         except Exception:
             self.driver.execute_script("arguments[0].click();", delete_menu_item)
 
 
-
     def wait_for_comment_count_to_increase(self, previous_count, timeout=5):
         WebDriverWait(self.driver, timeout).until(
             lambda driver: self.get_comment_count() > previous_count,
-            message=f"Liczba komentarzy nie wzrosła ponad {previous_count} w ciągu {timeout} sekund."
+            message=f"Number of comments does not increase from {previous_count} in time of{timeout} seconds."
         )
 
     def wait_for_comment_count_to_decrease(self, previous_count, timeout=5):
         WebDriverWait(self.driver, timeout).until(
             lambda driver: self.get_comment_count() < previous_count,
-            message=f"Liczba komentarzy nie zmieniła się poniżej {previous_count} w ciągu {timeout} sekund."
+            message=f"Number of comments does not decrease from {previous_count} in time of {timeout} seconds"
         )
-
 
     def manage_poll(self):
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(PollPageLocators.MANAGE_BUTTON)).click()
@@ -324,7 +291,6 @@ class PollPage(BasePage):
             EC.visibility_of_element_located(PollPageLocators.ACTIVE_LABEL)
         )
         return label.text
-
 
     def delete_poll(self):
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(PollPageLocators.MANAGE_BUTTON)).click()

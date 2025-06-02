@@ -1,9 +1,7 @@
 from Pages.base_page import BasePage
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
-
 from Pages.poll_page import PollPage
 from Locators.create_page_locators import CreatePageLocators
 
@@ -20,7 +18,7 @@ class CreatePage (BasePage):
         self.driver.find_element(*CreatePageLocators.DESCRIPTION_INPUT).send_keys(description)
 
     def enter_time(self):
-        #Scroll przegądarki
+        #Browser scroll
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         self.driver.find_element(*CreatePageLocators.DATE1_CLICK).click()
         self.driver.find_element(*CreatePageLocators.DATE2_CLICK).click()
@@ -28,30 +26,26 @@ class CreatePage (BasePage):
 
 
     def click_create_poll(self):
-        print("Scrolluję okno do dołu...")
+        #Browser scroll
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         self.driver.find_element(*CreatePageLocators.CREATEPOLL_CLICK).click()
-        print("Kliknięto przycisk.")
+        print("Button 'Create poll' clicked.")
 
 
     def save_modal_link_to_file(self, filename="copied_link.txt"):
         span_elem = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located(CreatePageLocators.COPIED_LINK_SPAN)
         )
-        #delete extra spacje
+        #remove excess spaces
         link_text = span_elem.text.strip()
-
-        # Ścieżka do katalogu głównego projektu PROJEKT (czyli jeden poziom wyżej względem Test/)
+        # Path to the main directory of the project: co.rallly.app (one level above Test/)
         BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-
         folder_path = os.path.join(BASE_DIR, "resources")
         os.makedirs(folder_path, exist_ok=True)
-
         file_path = os.path.join(folder_path, filename)
         with open(file_path, "w") as f:
             f.write(link_text)
-
-        print(f"Zapisano link: {link_text} do pliku: {file_path}")
+        print(f"Link saved: {link_text} to the file: {file_path}")
 
     def close_modal_and_go_to_poll_page(self):
         close_btn = WebDriverWait(self.driver, 10).until(
@@ -59,19 +53,6 @@ class CreatePage (BasePage):
         )
         close_btn.click()
         return PollPage(self.driver)
-
-    def get_page_header(self):
-        header = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located(CreatePageLocators.HEADER)
-        )
-        return header.text
-
-    def get_page_tite(self):
-        title = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located(CreatePageLocators.HEADER)
-        )
-        return title.text
-
 
 
     def turn_off_comments(self):
