@@ -80,7 +80,7 @@ class CreateTest(BaseTest):  # Inherits from BaseTest
                          "The meeting title does not match the one entered in the form.")
         print(f"Meeting title: {result_title} - test passed!")
 
-    def test_invalid_create_date(self):  # działa
+    def test_invalid_create_date(self):
         name = random_meeting_name()
         self.create_page.enter_title(name)
         self.create_page.click_create_poll()

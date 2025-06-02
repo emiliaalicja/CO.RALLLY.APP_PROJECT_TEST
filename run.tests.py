@@ -1,9 +1,6 @@
 import pytest
 import sys
 import os
-from Tests.poll_test import PollTest
-from Tests.create_test import CreateTest
-
 
 def main():
     test_dir = os.path.abspath("Tests")
